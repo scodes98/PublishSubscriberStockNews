@@ -1,0 +1,1 @@
+Pub sub project to get stock sector news 
