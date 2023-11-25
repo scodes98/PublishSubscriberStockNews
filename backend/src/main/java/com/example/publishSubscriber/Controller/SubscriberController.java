@@ -23,7 +23,7 @@ public class SubscriberController {
     @Autowired
     private SubscriberService subscriberService;
 
-    @PostMapping("/register")
+    @PostMapping("/registerSubscriber")
     public ResponseEntity<ValidationResponse> registerSubscriber(@RequestBody Subscriber credentials) {
         String username = credentials.getUsername();
         String password = credentials.getPassword();
@@ -44,7 +44,7 @@ public class SubscriberController {
                 .body(new ValidationResponse(HttpStatus.CREATED.value(), successMessage));
     }
 
-    @GetMapping("/validate")
+    @GetMapping("/validateSubscriber")
     public ResponseEntity<ValidationResponse> validateSubscriber(@RequestBody Subscriber credentials) {
         String username = credentials.getUsername();
         String password = credentials.getPassword();
