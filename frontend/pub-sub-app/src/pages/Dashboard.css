@@ -1,0 +1,21 @@
+.centered {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../images/download.png");
+    background-color:#e9e2e2;
+}
+.groupButton{
+    text-align: center;
+}
+.groupButton Button {
+    display: inline-block;
+    margin: 5px; 
+}
+.heading {
+    font-family:'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+    color: rgb(0, 0, 0);
+    font-size: 26px;
+    text-align: center;
+}
