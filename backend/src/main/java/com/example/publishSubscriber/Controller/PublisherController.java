@@ -50,7 +50,7 @@ public class PublisherController {
                 .body(new ValidationResponse(HttpStatus.CREATED.value(), successMessage));
     }
     
-    @GetMapping("/validatePublisher")
+    @PostMapping("/validatePublisher")
     public ResponseEntity<ValidationResponse> validatePublisher(@RequestBody Publisher credentials) {
         String username = credentials.getUsername();
         String password = credentials.getPassword();

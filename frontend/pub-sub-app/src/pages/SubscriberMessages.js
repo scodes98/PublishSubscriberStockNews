@@ -35,7 +35,12 @@ const SubscriberMessages = () => {
               console.error('Error during POST request:', error);
             }
         };
-        postRequest();
+        const delay = 3000;
+        const timeoutId = setTimeout(() => {
+            postRequest();
+        }, delay);
+        return () => clearTimeout(timeoutId);
+        
     }); 
 
     return (
