@@ -44,7 +44,7 @@ public class SubscriberController {
                 .body(new ValidationResponse(HttpStatus.CREATED.value(), successMessage));
     }
 
-    @GetMapping("/validateSubscriber")
+    @PostMapping("/validateSubscriber")
     public ResponseEntity<ValidationResponse> validateSubscriber(@RequestBody Subscriber credentials) {
         String username = credentials.getUsername();
         String password = credentials.getPassword();
