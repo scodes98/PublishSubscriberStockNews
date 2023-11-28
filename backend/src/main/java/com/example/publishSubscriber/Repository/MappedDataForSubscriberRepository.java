@@ -7,13 +7,9 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-
 @Repository
-public interface PublishedDataRepository extends MongoRepository<PublishedData, String> {
-    List<PublishedData> findByPublishMasterIdIn(List<String> publishMasterIds);
+public interface MappedDataForSubscriberRepository extends MongoRepository<MappedDataForSubscriber, String> {
 
-     // Find all records where fetchedForBroker is false
-     List<PublishedData> findByFetchedForBrokerFalse();
-
+    // Find the last record for a given publishMasterId, ordered by the document's default order
+    MappedDataForSubscriber findFirstByPublishMasterIdOrderByTimestampDesc(String publishMasterId);
 }
-

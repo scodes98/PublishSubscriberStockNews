@@ -2,26 +2,28 @@ package com.example.publishSubscriber.Entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 @Document(collection = "publishedData")
 public class PublishedData {
 
     @Id
     private String id;
-    private String publishMasterId; // Assuming publishMasterId is the non-primary key column
+    private String publishMasterId;
     private String publishSector;
     private String publishMessage;
+    private boolean fetchedForBroker; // New column
 
     // Constructors
     public PublishedData() {
         // Default constructor
+        this.fetchedForBroker = false; // Set the default value to false
     }
 
-    public PublishedData(String id, String publishMasterId, String publishSector, String publishMessage) {
+    public PublishedData(String id, String publishMasterId, String publishSector, String publishMessage, boolean fetchedForBroker) {
         this.id = id;
         this.publishMasterId = publishMasterId;
         this.publishSector = publishSector;
         this.publishMessage = publishMessage;
+        this.fetchedForBroker = false;
     }
 
     // Getters and setters
@@ -55,6 +57,14 @@ public class PublishedData {
 
     public void setPublishMessage(String publishMessage) {
         this.publishMessage = publishMessage;
+    }
+
+    public boolean isFetchedForBroker() {
+        return fetchedForBroker;
+    }
+
+    public void setFetchedForBroker(boolean fetchedForBroker) {
+        this.fetchedForBroker = fetchedForBroker;
     }
 
     // Other methods...
