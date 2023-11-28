@@ -1,0 +1,18 @@
+.mainContainer{
+    background-image: url("../images/download.png");
+    background-color:#e9e2e2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+.logoutBtn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.messageCardList{
+    margin-top: 90px;
+}
