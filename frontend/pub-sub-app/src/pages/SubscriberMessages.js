@@ -29,8 +29,8 @@ const SubscriberMessages = () => {
                     publishSectorIds: data
                 }
             );
-            // console.log('POST response:', response.data);
-            setMessages(response.data);
+            console.log('POST response:', response.data);
+            setMessages(prevMessages => [...prevMessages, ...response.data]);
 
             } catch (error) {
               console.error('Error during POST request:', error);
