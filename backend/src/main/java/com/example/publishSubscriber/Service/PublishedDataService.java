@@ -34,6 +34,8 @@ import org.springframework.http.*;
 @Service
 public class PublishedDataService {
 
+    private final GlobalService globalService;
+
     @Autowired
     private PublishedDataRepository publishedDataRepository;
 
@@ -49,6 +51,14 @@ public class PublishedDataService {
 
     @Autowired
     private ApiLogSendSectorRepository apiLogSendSectorRepository;
+
+    public PublishedDataService(GlobalService globalService) {
+        this.globalService = globalService;
+    }
+
+    public String getGlobalIpAddress() {
+        return globalService.getGlobalIpAddress();
+    }
 
     // private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -87,9 +97,13 @@ public class PublishedDataService {
         // System.out.println(logMessage);
 
         // Make an HTTP POST request to an external API
-        String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendPublishDataToBrokerEndpoint";  // Replace with your external API URL
+        // String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendPublishDataToBrokerEndpoint";  // Replace with your external API URL
 
-        // String externalApiUrl = "http://3.22.75.130:3000/publishData";  // Replace with your external API URL
+        String brokerExternalApiUrl = getGlobalIpAddress(); 
+
+        String externalApiUrl = "http://" + brokerExternalApiUrl + "/publishData"; 
+
+        System.out.println("BROKER IP ADDRESS -  "+externalApiUrl);
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
@@ -326,9 +340,15 @@ public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(List<Mapp
         // System.out.println(logMessage);
 
         // Make an HTTP POST request to an external API
-        String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendSectorNameAndOffsetToBrokerEndpoint";  // Replace with your external API URL
+        // String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendSectorNameAndOffsetToBrokerEndpoint";  // Replace with your external API URL
 
         // String externalApiUrl = "http://3.22.75.130:3000/fetchPublishedData";  // Replace with your external API URL
+
+        String brokerExternalApiUrl = getGlobalIpAddress(); 
+
+        String externalApiUrl = "http://" + brokerExternalApiUrl + "/fetchPublishedData"; 
+
+        System.out.println("BROKER IP ADDRESS -  "+externalApiUrl);
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
