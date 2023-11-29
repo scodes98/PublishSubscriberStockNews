@@ -14,6 +14,7 @@ import com.example.publishSubscriber.Model.BrokerIpRequest;
 import com.example.publishSubscriber.Repository.PublishedDataRepository;
 import com.example.publishSubscriber.Repository.SubscriberDataLogRepository;
 import com.example.publishSubscriber.Repository.BrokerIpAddressRepository;
+import com.example.publishSubscriber.Service.GlobalService;
 import com.example.publishSubscriber.Service.PublishMasterService;
 import com.example.publishSubscriber.Service.PublishedDataService;
 import com.example.publishSubscriber.Service.PublisherService;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/publisher")
 public class PublisherController {
 
+    private final GlobalService globalService;
+
     @Autowired
     private PublisherService publisherService;
     @Autowired
@@ -49,6 +52,10 @@ public class PublisherController {
     private SubscriberDataLogRepository subscriberDataLogRepository;
     @Autowired
     private BrokerIpAddressRepository brokerIpAddressRepository;
+
+    public PublisherController(GlobalService globalService) {
+        this.globalService = globalService;
+    }
 
     @PostMapping("/registerPublisher")
     public ResponseEntity<ValidationResponse> registerPublisher(@RequestBody Publisher credentials) {
@@ -195,6 +202,8 @@ public class PublisherController {
         try {
             // Extract IP address from the request
             String ipAddress = request.getIpAddress();
+
+            globalService.setGlobalIpAddress(ipAddress);
 
             // Create and save BrokerIpAddress entity
             BrokerIpAddress brokerIpAddress = new BrokerIpAddress(ipAddress);
