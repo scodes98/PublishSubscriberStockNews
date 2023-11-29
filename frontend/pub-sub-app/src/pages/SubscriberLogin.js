@@ -8,6 +8,7 @@ import 'material-react-toastify/dist/ReactToastify.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import SubscriberHome from './SubscriberHome';
+import Background from '../images/download.png';
 import * as URLS from './../utils.js';
 
 const SubscriberLogin = () => {
@@ -46,7 +47,7 @@ const SubscriberLogin = () => {
                    <SubscriberHome/> 
                 </>
             ):(
-            <MDBContainer className='centered'>
+            <MDBContainer style={{backgroundImage: "url("+ Background +")", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
                 <MDBRow >
                 <section>
                     {errMsg && (
