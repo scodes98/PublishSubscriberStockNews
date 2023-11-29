@@ -105,6 +105,8 @@ public class PublishedDataService {
 
         System.out.println("BROKER IP ADDRESS -  "+externalApiUrl);
 
+        System.out.println(externalApiRequest);
+
         // Set headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
