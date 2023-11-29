@@ -11,6 +11,9 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import * as URLS from './../utils.js';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const PublisherHome = () => {
     const [options, setOptions] = useState([]);
@@ -46,8 +49,26 @@ const PublisherHome = () => {
                     publishMessage: message
                 }
             )
+            toast.success('Message published successfully!', {
+                position: 'top-left',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         } catch (err) {
             console.log(err.message);
+            toast.error('Error while publishing message!', {
+                position: 'top-left',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -87,6 +108,7 @@ const PublisherHome = () => {
                             />
                         </FormControl>
                         <Button variant="primary" onClick={handlePublish}>Publish</Button>
+                        <ToastContainer/>
                     </Card.Body>
                     <Card.Footer className="text-muted">COEN 327</Card.Footer>
                 </Card>
