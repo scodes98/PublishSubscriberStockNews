@@ -4,12 +4,12 @@ import {
     useState
 } from 'react';
 
-import './PublisherLogin.css';
 import axios from 'axios';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import PublisherHome from './PublisherHome';
+import Background from '../images/download.png';
 import * as URLS from './../utils.js';
 
 const PublisherLogin = () => {
@@ -51,7 +51,7 @@ const PublisherLogin = () => {
                 </>
             ):(
             
-            <MDBContainer className='centered'>
+            <MDBContainer style={{backgroundImage: "url("+ Background +")", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}} >
                 
                 
                 <MDBRow >
