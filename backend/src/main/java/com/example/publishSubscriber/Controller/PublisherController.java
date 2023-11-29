@@ -170,9 +170,24 @@ public class PublisherController {
         }
     }
 
-    @GetMapping("/fetchMappedDataForSubscriber")
-    public String fetchMappedDataForSubscriber() {
-        return publishedDataService.fetchAndStoreMappedDataForSubscriber();
+    // @GetMapping("/fetchMappedDataForSubscriber")
+    // public String fetchMappedDataForSubscriber() {
+    //     return publishedDataService.fetchAndStoreMappedDataForSubscriber();
+    // }
+
+    @PostMapping("/fetchMappedDataForSubscriber")
+    public ResponseEntity<String> fetchLatestPublishedData(@RequestBody SubscriberDataUpdateRequest updateRequest) {
+        try {
+            String response = publishedDataService.fetchAndStoreMappedDataForSubscriber(updateRequest);
+    
+            if (response.contains("Failed")) {
+                return new ResponseEntity<>("Error processing request: " + response, HttpStatus.BAD_GATEWAY);
+            } else {
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/fetchBrokerIp")
@@ -296,6 +311,10 @@ public class PublisherController {
 
 //     return ResponseEntity.ok(dataLogs);
 // }
+
+
+ 
+
 
 
 //     @PostMapping("/fetchLatestPublishedData")

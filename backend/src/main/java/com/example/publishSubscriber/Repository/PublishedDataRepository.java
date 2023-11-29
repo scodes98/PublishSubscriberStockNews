@@ -13,7 +13,9 @@ public interface PublishedDataRepository extends MongoRepository<PublishedData, 
     List<PublishedData> findByPublishMasterIdIn(List<String> publishMasterIds);
 
      // Find all records where fetchedForBroker is false
-     List<PublishedData> findByFetchedForBrokerFalse();
+    //  List<PublishedData> findByFetchedForBrokerFalse();
+
+     List<PublishedData> findByFetchedForBrokerFalseAndPublishMasterIdIn(List<String> publishSectorIds);
 
 }
 

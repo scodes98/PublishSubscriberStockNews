@@ -6,6 +6,7 @@ import com.example.publishSubscriber.Entity.MappedDataForSubscriber;
 import com.example.publishSubscriber.Entity.PublishSectorOffset;
 
 import com.example.publishSubscriber.Entity.PublishedData;
+import com.example.publishSubscriber.Entity.SubscriberDataUpdateRequest;
 import com.example.publishSubscriber.Model.PublishDataApiBrokerRequest;
 import com.example.publishSubscriber.Repository.PublishMasterRepository;
 import com.example.publishSubscriber.Repository.PublishedDataRepository;
@@ -86,9 +87,9 @@ public class PublishedDataService {
         // System.out.println(logMessage);
 
         // Make an HTTP POST request to an external API
-        // String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendPublishDataToBrokerEndpoint";  // Replace with your external API URL
+        String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendPublishDataToBrokerEndpoint";  // Replace with your external API URL
 
-        String externalApiUrl = "http://3.22.75.130:3000/publishData";  // Replace with your external API URL
+        // String externalApiUrl = "http://3.22.75.130:3000/publishData";  // Replace with your external API URL
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
@@ -181,9 +182,14 @@ public class PublishedDataService {
 // }
 
 
-public String fetchAndStoreMappedDataForSubscriber() {
+public String fetchAndStoreMappedDataForSubscriber(SubscriberDataUpdateRequest updateRequest) {
     // List<PublishedData> publishedDataList = publishedDataRepository.findAll();
-    List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalse();
+    // List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalse();
+    List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalseAndPublishMasterIdIn(updateRequest.getPublishSectorIds());
+
+    // System.out.println(unpublishedDataList);
+    // System.exit(0);
+
     List<MappedDataForSubscriber> mappedDataList = new ArrayList<>();
 
     for (PublishedData data : unpublishedDataList) {
@@ -320,9 +326,9 @@ public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(List<Mapp
         // System.out.println(logMessage);
 
         // Make an HTTP POST request to an external API
-        // String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendSectorNameAndOffsetToBrokerEndpoint";  // Replace with your external API URL
+        String externalApiUrl = "http://localhost:8080/api/v1/publisher/sendSectorNameAndOffsetToBrokerEndpoint";  // Replace with your external API URL
 
-        String externalApiUrl = "http://3.22.75.130:3000/fetchPublishedData";  // Replace with your external API URL
+        // String externalApiUrl = "http://3.22.75.130:3000/fetchPublishedData";  // Replace with your external API URL
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
@@ -349,9 +355,29 @@ public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(List<Mapp
         // Check the response status
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
              apiResponse = responseEntity.getBody();
+            //  apiResponse = "[\r\n" + //
+            //          "    {\r\n" + //
+            //          "        \"publishSector\": \"Technology\",\r\n" + //
+            //          "        \"messages\": [\r\n" + //
+            //          "            \"message 4\",\r\n" + //
+            //          "            \"message 5\",\r\n" + //
+            //          "            \"message 6\"\r\n" + //
+            //          "        ]\r\n" + //
+            //          "    },\r\n" + //
+            //          "    {\r\n" + //
+            //          "        \"publishSector\": \"Pharmaceuticals\",\r\n" + //
+            //          "        \"messages\": [\r\n" + //
+            //          "            \"message 2\",\r\n" + //
+            //          "            \"message 3\"\r\n" + //
+            //          "        ]\r\n" + //
+            //          "    }\r\n" + //
+            //          "]";
         } else {
-             apiResponse = "\nExternal API call failed. Status code: " + responseEntity.getStatusCode();
+             apiResponse = "Failed - " + responseEntity.getStatusCode();
         }
+
+        // apiResponse = "Failed - " + responseEntity.getStatusCode();
+
 
         // Save the log to MongoDB
         String apiName = "sendSectorNameAndOffsetToBroker";
