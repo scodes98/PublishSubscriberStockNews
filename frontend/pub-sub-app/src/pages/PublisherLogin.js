@@ -38,8 +38,8 @@ const PublisherLogin = () => {
             
         } catch (err) {
             setSuccess(false);
-            setErrMsg(JSON.stringify(err.message))
-            console.log(err.message);
+            setErrMsg(err.response.data.message);
+            // console.log(err.response.data.message);
         }
     } 
     
