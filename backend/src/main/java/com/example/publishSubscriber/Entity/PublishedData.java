@@ -2,6 +2,7 @@ package com.example.publishSubscriber.Entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 @Document(collection = "publishedData")
 public class PublishedData {
 
@@ -10,20 +11,26 @@ public class PublishedData {
     private String publishMasterId;
     private String publishSector;
     private String publishMessage;
-    private boolean fetchedForBroker; // New column
+    private boolean fetchedForBroker;
+    private boolean siddhesh; // New column
+    private boolean piyush; // New column
 
     // Constructors
     public PublishedData() {
         // Default constructor
-        this.fetchedForBroker = false; // Set the default value to false
+        this.fetchedForBroker = false;
+        this.siddhesh = false; // Set the default value to false
+        this.piyush = false; // Set the default value to false
     }
 
-    public PublishedData(String id, String publishMasterId, String publishSector, String publishMessage, boolean fetchedForBroker) {
+    public PublishedData(String id, String publishMasterId, String publishSector, String publishMessage, boolean fetchedForBroker, boolean siddhesh, boolean piyush) {
         this.id = id;
         this.publishMasterId = publishMasterId;
         this.publishSector = publishSector;
         this.publishMessage = publishMessage;
-        this.fetchedForBroker = false;
+        this.fetchedForBroker = fetchedForBroker;
+        this.siddhesh = siddhesh;
+        this.piyush = piyush;
     }
 
     // Getters and setters
@@ -65,6 +72,22 @@ public class PublishedData {
 
     public void setFetchedForBroker(boolean fetchedForBroker) {
         this.fetchedForBroker = fetchedForBroker;
+    }
+
+    public boolean isSiddhesh() {
+        return siddhesh;
+    }
+
+    public void setSiddhesh(boolean siddhesh) {
+        this.siddhesh = siddhesh;
+    }
+
+    public boolean isPiyush() {
+        return piyush;
+    }
+
+    public void setPiyush(boolean piyush) {
+        this.piyush = piyush;
     }
 
     // Other methods...

@@ -2,6 +2,7 @@ package com.example.publishSubscriber.Controller;
 
 import com.example.publishSubscriber.Entity.MappedDataForSubscriber;
 import com.example.publishSubscriber.Entity.PublishMaster;
+import com.example.publishSubscriber.Entity.PublishSectorOffset;
 import com.example.publishSubscriber.Entity.PublishedData;
 import com.example.publishSubscriber.Entity.Publisher;
 import com.example.publishSubscriber.Entity.SubscriberDataLog;
@@ -181,6 +182,25 @@ public class PublisherController {
     // public String fetchMappedDataForSubscriber() {
     //     return publishedDataService.fetchAndStoreMappedDataForSubscriber();
     // }
+
+
+    //  @PostMapping("/fetchMappedDataForSubscriber")
+    // public List<PublishSectorOffset> fetchLatestPublishedData(@RequestBody SubscriberDataUpdateRequest updateRequest) {
+    //         return publishedDataService.fetchAndStoreMappedDataForSubscriber(updateRequest);
+
+    //     // try {
+    //     //     String response = 
+    
+    //     //     if (response.contains("Failed")) {
+    //     //         return new ResponseEntity<>("Error processing request: " + response, HttpStatus.BAD_GATEWAY);
+    //     //     } else {
+    //     //         return new ResponseEntity<>(response, HttpStatus.OK);
+    //     //     }
+    //     // } catch (Exception e) {
+    //     //     return new ResponseEntity<>("Error processing request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    //     // }
+    // }
+
 
     @PostMapping("/fetchMappedDataForSubscriber")
     public ResponseEntity<String> fetchLatestPublishedData(@RequestBody SubscriberDataUpdateRequest updateRequest) {
