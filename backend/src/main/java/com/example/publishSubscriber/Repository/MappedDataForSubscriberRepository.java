@@ -12,4 +12,7 @@ public interface MappedDataForSubscriberRepository extends MongoRepository<Mappe
 
     // Find the last record for a given publishMasterId, ordered by the document's default order
     MappedDataForSubscriber findFirstByPublishMasterIdOrderByTimestampDesc(String publishMasterId);
+
+    MappedDataForSubscriber findFirstByUsernameAndPublishMasterIdOrderByTimestampDesc(String username, String publishMasterId);
+
 }

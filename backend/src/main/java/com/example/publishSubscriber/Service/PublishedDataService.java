@@ -198,27 +198,103 @@ public class PublishedDataService {
 // }
 
 
-public String fetchAndStoreMappedDataForSubscriber(SubscriberDataUpdateRequest updateRequest) {
-    // List<PublishedData> publishedDataList = publishedDataRepository.findAll();
-    // List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalse();
-    List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalseAndPublishMasterIdIn(updateRequest.getPublishSectorIds());
+// public String fetchAndStoreMappedDataForSubscriber(SubscriberDataUpdateRequest updateRequest) {
+//     // List<PublishedData> publishedDataList = publishedDataRepository.findAll();
+//     // List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalse();
+//     // List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalseAndPublishMasterIdIn(updateRequest.getPublishSectorIds());
 
-    // System.out.println(unpublishedDataList);
-    // System.exit(0);
+//     String email = updateRequest.getSubscriberUsername();
+
+//     // Find the index of the "@" symbol
+//     int atIndex = email.indexOf('@');
+//     String username = email.substring(0, atIndex);
+
+//     // List<PublishedData> unpublishedDataList = publishedDataRepository.findByFetchedForBrokerFalseAndPublishMasterIdIn(updateRequest.getPublishSectorIds());
+
+//     // System.out.println(username);
+//     // System.out.println(unpublishedDataList);
+//     // System.exit(0);
+
+//     // String columnName = updateRequest.getSubscriberUsername(); // Assuming this is either "siddhesh" or "piyush"
+//     List<PublishedData> unpublishedDataList = publishedDataRepository.findByUsernameAndFetchedForBrokerFalse(
+//             username,
+//             updateRequest.getPublishSectorIds()
+//     );
+
+//     // System.out.println(unpublishedDataList);
+//     // System.exit(0);
+
+//     List<MappedDataForSubscriber> mappedDataList = new ArrayList<>();
+
+//     for (PublishedData data : unpublishedDataList) {
+//         int latestOffset = findLatestOffsetForPublishMasterId(data.getPublishMasterId());
+
+//         // Create a MappedDataForSubscriber object and set the offset and timestamp
+//         MappedDataForSubscriber mappedData = new MappedDataForSubscriber(
+//                 data.getPublishMasterId(),
+//                 data.getPublishSector()
+//         );
+//         mappedData.setOffset(latestOffset + 1);
+//         mappedData.setTimestamp(LocalDateTime.now());
+
+
+//         // Save each mappedData individually
+//         MappedDataForSubscriber savedMappedData = mappedDataForSubscriberRepository.save(mappedData);
+
+//         // Add the saved mappedData to the list
+//         mappedDataList.add(savedMappedData);
+
+//         // Update the PublishedData to mark it as fetched for broker
+//         data.setFetchedForBroker(true);
+//         publishedDataRepository.save(data);
+
+//         // Store or process the data as needed
+//         // You can save the original PublishedData back to the repository or perform other operations
+//         // publishedDataRepository.save(data);
+//     }
+
+//     // Use the list to fetch the latest records for each unique publishMasterId
+//     List<PublishSectorOffset> latestRecords = fetchLatestRecordsForPublishMasterIds(mappedDataList);
+
+//     String apiResponseFrom = sendSectorNameAndOffsetToBrokerAndLog(latestRecords);
+
+//      // Save the mappedDataList to the database
+//     //  mappedDataForSubscriberRepository.saveAll(mappedDataList);
+
+//     return apiResponseFrom;
+// }
+
+public String fetchAndStoreMappedDataForSubscriber(SubscriberDataUpdateRequest updateRequest) {
+    // ...
+
+    String email = updateRequest.getSubscriberUsername();
+
+    // Find the index of the "@" symbol
+    int atIndex = email.indexOf('@');
+    String username = email.substring(0, atIndex);
+
+    System.out.println(username);
+
+    // ...
+
+    List<PublishedData> unpublishedDataList = publishedDataRepository.findByUsernameAndFetchedForBrokerFalse(
+            username,
+            updateRequest.getPublishSectorIds()
+    );
 
     List<MappedDataForSubscriber> mappedDataList = new ArrayList<>();
 
     for (PublishedData data : unpublishedDataList) {
-        int latestOffset = findLatestOffsetForPublishMasterId(data.getPublishMasterId());
+        int latestOffset = findLatestOffsetForUsernameAndPublishMasterId(username, data.getPublishMasterId());
 
         // Create a MappedDataForSubscriber object and set the offset and timestamp
         MappedDataForSubscriber mappedData = new MappedDataForSubscriber(
                 data.getPublishMasterId(),
-                data.getPublishSector()
+                data.getPublishSector(),
+                username
         );
         mappedData.setOffset(latestOffset + 1);
         mappedData.setTimestamp(LocalDateTime.now());
-
 
         // Save each mappedData individually
         MappedDataForSubscriber savedMappedData = mappedDataForSubscriberRepository.save(mappedData);
@@ -226,9 +302,20 @@ public String fetchAndStoreMappedDataForSubscriber(SubscriberDataUpdateRequest u
         // Add the saved mappedData to the list
         mappedDataList.add(savedMappedData);
 
-        // Update the PublishedData to mark it as fetched for broker
-        data.setFetchedForBroker(true);
-        publishedDataRepository.save(data);
+        // String som_string = "setSiddhesh";
+
+        if("siddhesh".equals(username)){
+              // Update the PublishedData to mark it as fetched for broker
+            data.setSiddhesh(true);
+            publishedDataRepository.save(data);
+        }else{
+            data.setPiyush(true);
+            publishedDataRepository.save(data);
+        }
+        
+        // // Update the PublishedData to mark it as fetched for broker
+        // data.setFetchedForBroker(true);
+        // publishedDataRepository.save(data);
 
         // Store or process the data as needed
         // You can save the original PublishedData back to the repository or perform other operations
@@ -236,21 +323,19 @@ public String fetchAndStoreMappedDataForSubscriber(SubscriberDataUpdateRequest u
     }
 
     // Use the list to fetch the latest records for each unique publishMasterId
-    List<PublishSectorOffset> latestRecords = fetchLatestRecordsForPublishMasterIds(mappedDataList);
+    List<PublishSectorOffset> latestRecords = fetchLatestRecordsForPublishMasterIds(username, mappedDataList);
 
     String apiResponseFrom = sendSectorNameAndOffsetToBrokerAndLog(latestRecords);
 
-     // Save the mappedDataList to the database
-    //  mappedDataForSubscriberRepository.saveAll(mappedDataList);
+    // Save the mappedDataList to the database
+    mappedDataForSubscriberRepository.saveAll(mappedDataList);
 
     return apiResponseFrom;
 }
 
-private int findLatestOffsetForPublishMasterId(String publishMasterId) {
-    MappedDataForSubscriber latestData = mappedDataForSubscriberRepository.findFirstByPublishMasterIdOrderByTimestampDesc(publishMasterId);
 
-    System.out.println(publishMasterId);
-    System.out.println(latestData);
+private int findLatestOffsetForUsernameAndPublishMasterId(String username, String publishMasterId) {
+    MappedDataForSubscriber latestData = mappedDataForSubscriberRepository.findFirstByUsernameAndPublishMasterIdOrderByTimestampDesc(username, publishMasterId);
 
     if (latestData != null) {
         return latestData.getOffset();
@@ -258,6 +343,20 @@ private int findLatestOffsetForPublishMasterId(String publishMasterId) {
         return 0;
     }
 }
+
+
+// private int findLatestOffsetForPublishMasterId(String publishMasterId) {
+//     MappedDataForSubscriber latestData = mappedDataForSubscriberRepository.findFirstByPublishMasterIdOrderByTimestampDesc(publishMasterId);
+
+//     System.out.println(publishMasterId);
+//     System.out.println(latestData);
+
+//     if (latestData != null) {
+//         return latestData.getOffset();
+//     } else {
+//         return 0;
+//     }
+// }
 
 // public List<MappedDataForSubscriber> fetchLatestRecordsForPublishMasterIds(List<MappedDataForSubscriber> mappedDataList) {
 //     // Fetch the latest records for each unique publishMasterId with the maximum offset
@@ -295,11 +394,36 @@ private int findLatestOffsetForPublishMasterId(String publishMasterId) {
 //     return latestRecords;
 // }
 
-public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(List<MappedDataForSubscriber> mappedDataList) {
+// public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(List<MappedDataForSubscriber> mappedDataList) {
+//     // Fetch the records with the modified offset for each unique publishMasterId
+//     List<PublishSectorOffset> latestRecords = mappedDataList
+//             .stream()
+//             .filter(mappedData -> mappedData.getOffset() != -1) // Exclude records with offset -1
+//             .collect(Collectors.toMap(
+//                     MappedDataForSubscriber::getPublishMasterId,
+//                     Function.identity(),
+//                     // Merge function to keep the record with the minimum offset
+//                     (existing, replacement) -> existing.getOffset() <= replacement.getOffset() ? existing : replacement
+//             ))
+//             .values()
+//             .stream()
+//             .map(mappedData -> {
+//                 // Decrement the offset by 1 (except when the offset is already 0)
+//                 int modifiedOffset = Math.max(mappedData.getOffset() - 1, 0);
+//                 return new PublishSectorOffset(mappedData.getPublishSector(), modifiedOffset);
+//             })
+//             .collect(Collectors.toList());
+
+//     return latestRecords;
+// }
+
+
+public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(String username, List<MappedDataForSubscriber> mappedDataList) {
     // Fetch the records with the modified offset for each unique publishMasterId
     List<PublishSectorOffset> latestRecords = mappedDataList
             .stream()
-            .filter(mappedData -> mappedData.getOffset() != -1) // Exclude records with offset -1
+            .filter(mappedData -> mappedData.getOffset() != -1 && username.equals(mappedData.getUsername()))
+            // Exclude records with offset -1 and only include records with the specified username
             .collect(Collectors.toMap(
                     MappedDataForSubscriber::getPublishMasterId,
                     Function.identity(),
@@ -317,7 +441,6 @@ public List<PublishSectorOffset> fetchLatestRecordsForPublishMasterIds(List<Mapp
 
     return latestRecords;
 }
-
 
 
  public String sendSectorNameAndOffsetToBrokerAndLog(List<PublishSectorOffset> latestRecords) {
