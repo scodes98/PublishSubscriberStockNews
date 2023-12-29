@@ -1,1 +1,1 @@
-Pub sub project to get stock sector news 
+Stock Market Notifications Using Publisher-Subscriber Mechanism
