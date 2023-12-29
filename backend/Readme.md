@@ -1,1 +1,1 @@
-broker application to handle pub sub queues
+Backend server built on Spring Boot
